@@ -20,11 +20,8 @@
                     },
                     colors: {
                         sarqyt: {
-                            50: '#ecfdf5',
-                            100: '#d1fae5',
-                            500: '#10b981',
-                            600: '#059669',
-                            900: '#064e3b',
+                            50: '#ecfdf5', 100: '#d1fae5',
+                            500: '#10b981', 600: '#059669', 900: '#064e3b',
                         }
                     }
                 }
@@ -32,98 +29,112 @@
         }
     </script>
     <style>
-        body {
-            background-color: #f3f4f6;
-            -webkit-tap-highlight-color: transparent;
-            overscroll-behavior-y: none;
-        }
+        body { background:#f3f4f6; -webkit-tap-highlight-color:transparent; overscroll-behavior-y:none; }
         .app-container {
-            max-width: 414px;
-            margin: 0 auto;
-            background-color: #f8fafc;
-            height: 100dvh;
-            position: relative;
-            box-shadow: 0 0 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            max-width:414px; margin:0 auto; background:#f8fafc;
+            height:100dvh; position:relative; box-shadow:0 0 40px rgba(0,0,0,.1);
+            overflow:hidden; display:flex; flex-direction:column;
         }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .bottom-sheet {
-            transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .bottom-sheet.open { transform: translateY(0); }
-        .overlay {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        .overlay.open { opacity: 1; pointer-events: auto; }
-        .card-img-gradient {
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%);
-        }
-        #map { width: 100%; height: 100%; z-index: 10; }
+        .no-scrollbar::-webkit-scrollbar { display:none; }
+        .no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+        .bottom-sheet { transform:translateY(100%); transition:transform .35s cubic-bezier(.4,0,.2,1); }
+        .bottom-sheet.open { transform:translateY(0); }
+        .overlay { opacity:0; pointer-events:none; transition:opacity .3s ease; }
+        .overlay.open { opacity:1; pointer-events:auto; }
+        .card-img-gradient { background:linear-gradient(to top,rgba(0,0,0,.8) 0%,rgba(0,0,0,0) 60%); }
+        #map { width:100%; height:100%; z-index:10; }
         .custom-marker {
-            background: #10b981;
-            border: 3px solid white;
-            border-radius: 50%;
-            color: white;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            font-size: 12px;
+            background:#10b981; border:3px solid white; border-radius:50%;
+            color:white; font-weight:bold; display:flex; align-items:center;
+            justify-content:center; box-shadow:0 4px 10px rgba(0,0,0,.3); font-size:12px;
         }
-        /* Skeleton shimmer */
-        @keyframes shimmer {
-            0% { background-position: -400px 0; }
-            100% { background-position: 400px 0; }
-        }
+        @keyframes shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
         .skeleton {
-            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-            background-size: 400px 100%;
-            animation: shimmer 1.4s infinite;
-            border-radius: 12px;
+            background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
+            background-size:400px 100%; animation:shimmer 1.4s infinite; border-radius:12px;
         }
-        /* Connection status badge */
-        .status-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-        .status-dot.online { background: #10b981; box-shadow: 0 0 0 2px #d1fae5; }
-        .status-dot.offline { background: #ef4444; box-shadow: 0 0 0 2px #fee2e2; }
-        .status-dot.loading {
-            background: #f59e0b;
-            animation: pulse 1s infinite;
-        }
+        .status-dot { width:8px;height:8px;border-radius:50%;display:inline-block; }
+        .status-dot.online  { background:#10b981; box-shadow:0 0 0 2px #d1fae5; }
+        .status-dot.offline { background:#ef4444; box-shadow:0 0 0 2px #fee2e2; }
+        .status-dot.loading { background:#f59e0b; animation:pulse 1s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+        /* City sheet */
+        .city-sheet {
+            position:absolute; bottom:0; left:0; right:0;
+            background:white; border-radius:32px 32px 0 0; z-index:60;
+            transform:translateY(100%); transition:transform .35s cubic-bezier(.4,0,.2,1);
+            max-height:70vh; overflow-y:auto;
+        }
+        .city-sheet.open { transform:translateY(0); }
+
+        /* Sub sheet */
+        .sub-sheet {
+            position:absolute; bottom:0; left:0; right:0;
+            background:white; border-radius:32px 32px 0 0; z-index:60;
+            transform:translateY(100%); transition:transform .35s cubic-bezier(.4,0,.2,1);
+            max-height:90vh; overflow-y:auto;
+        }
+        .sub-sheet.open { transform:translateY(0); }
+
+        /* Sub plan card */
+        .sub-plan { transition:all .2s; cursor:pointer; }
+        .sub-plan.selected {
+            border-color:#059669 !important;
+            background:linear-gradient(135deg,#ecfdf5,#d1fae5) !important;
+        }
+        .sub-plan.popular { position:relative; overflow:hidden; }
+
+        /* Shimmer badge */
+        @keyframes badge-shine {
+            0%   { left:-60%; }
+            100% { left:110%; }
+        }
+        .shine-badge::after {
+            content:''; position:absolute; top:0; left:-60%;
+            width:40%; height:100%;
+            background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+            animation:badge-shine 2s infinite;
+        }
+
+        /* City item hover */
+        .city-item { transition:background .15s; }
+        .city-item:hover { background:#f0fdf4; }
+        .city-item.active { background:#ecfdf5; }
+
+        /* bottom nav safe */
+        nav { padding-bottom:env(safe-area-inset-bottom,8px); }
     </style>
 </head>
 <body class="text-slate-800">
-
 <div class="app-container">
 
-    <!-- HEADER -->
-    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-20 px-5 py-4 flex justify-between items-center border-b border-slate-100">
+    <!-- ══════════════ HEADER ══════════════ -->
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-20 px-5 py-3 flex justify-between items-center border-b border-slate-100">
         <div>
-            <h1 class="font-display font-black text-2xl text-sarqyt-600 tracking-tight">Sarqyt.</h1>
-            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 flex items-center gap-1">
+            <h1 class="font-display font-black text-2xl text-sarqyt-600 tracking-tight leading-none">Sarqyt.</h1>
+            <!-- City selector trigger -->
+            <button onclick="openCity()" class="flex items-center gap-1 mt-0.5 group">
                 <i data-lucide="map-pin" class="w-3 h-3 text-sarqyt-500"></i>
-                Алматы, Центр
+                <span id="city-label" class="text-[11px] font-bold text-slate-500 group-hover:text-sarqyt-600 transition-colors" style="letter-spacing:.05em" id="city-label-text">Алматы</span>
+                <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400 group-hover:text-sarqyt-500 transition-colors"></i>
                 <span class="status-dot loading ml-1" id="conn-dot"></span>
-                <span id="conn-label" class="normal-case tracking-normal font-medium text-slate-300">подключение...</span>
-            </p>
+                <span id="conn-label" class="text-[10px] font-medium text-slate-300 ml-0.5">подключение...</span>
+            </button>
         </div>
-        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center cursor-pointer hover:bg-slate-200">
-            <i data-lucide="user" class="w-5 h-5 text-slate-600"></i>
+        <div class="flex items-center gap-2">
+            <!-- Subscription trigger -->
+            <button onclick="openSub()" class="relative flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-orange-400 text-white text-[11px] font-bold px-3 py-1.5 rounded-full shadow-md hover:shadow-lg transition-shadow shine-badge overflow-hidden">
+                <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i>
+                Подписка
+            </button>
+            <button class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
+                <i data-lucide="user" class="w-4.5 h-4.5 text-slate-600"></i>
+            </button>
         </div>
     </header>
 
-    <!-- FEED VIEW -->
+    <!-- ══════════════ FEED VIEW ══════════════ -->
     <main id="view-feed" class="flex-1 overflow-y-auto no-scrollbar pb-24">
 
         <!-- Eco stats -->
@@ -143,6 +154,20 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Sub promo banner (shows if no active sub) -->
+        <div id="sub-promo" class="px-5 mb-3">
+            <button onclick="openSub()" class="w-full bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl px-4 py-3 flex items-center gap-3 text-left hover:shadow-md transition-shadow">
+                <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-400 rounded-xl flex items-center justify-center shrink-0 shadow">
+                    <i data-lucide="zap" class="w-5 h-5 text-white fill-current"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-[11px] font-bold text-amber-700 uppercase tracking-wide">Sarqyt Plus</p>
+                    <p class="text-sm font-bold text-slate-700">12 пакетов за <span class="text-orange-500">12 990 ₸</span> в месяц</p>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-amber-400 shrink-0"></i>
+            </button>
         </div>
 
         <!-- Filters -->
@@ -167,7 +192,6 @@
 
         <!-- List -->
         <div class="px-5 space-y-4" id="restaurants-list">
-            <!-- Skeletons shown while loading -->
             <div id="skeleton-loader" class="space-y-4">
                 <div class="bg-white rounded-3xl overflow-hidden border border-slate-100">
                     <div class="skeleton h-40 w-full rounded-none"></div>
@@ -183,26 +207,18 @@
                         <div class="skeleton h-6 w-16"></div>
                     </div>
                 </div>
-                <div class="bg-white rounded-3xl overflow-hidden border border-slate-100">
-                    <div class="skeleton h-40 w-full rounded-none"></div>
-                    <div class="p-4 flex justify-between items-center">
-                        <div class="skeleton h-4 w-24"></div>
-                        <div class="skeleton h-6 w-16"></div>
-                    </div>
-                </div>
             </div>
         </div>
-
         <div class="h-10"></div>
     </main>
 
-    <!-- MAP VIEW -->
+    <!-- ══════════════ MAP VIEW ══════════════ -->
     <main id="view-map" class="hidden flex-1 relative bg-slate-200">
         <div id="map"></div>
         <div id="map-quick-view" class="absolute bottom-24 left-5 right-5 bg-white rounded-3xl p-4 shadow-2xl z-20 hidden transition-all duration-300 transform translate-y-10 opacity-0"></div>
     </main>
 
-    <!-- ORDERS VIEW -->
+    <!-- ══════════════ ORDERS VIEW ══════════════ -->
     <main id="view-orders" class="hidden flex-1 overflow-y-auto no-scrollbar pb-24 bg-slate-50 px-5 py-4">
         <h2 class="font-display font-black text-3xl mb-6 text-slate-800">Мои спасения</h2>
         <div id="orders-list" class="space-y-4">
@@ -213,8 +229,8 @@
         </div>
     </main>
 
-    <!-- BOTTOM NAV -->
-    <nav class="bg-white border-t border-slate-100 absolute bottom-0 w-full flex justify-around items-center pt-2 px-2 z-30 shadow-[0_-10px_20px_rgba(0,0,0,0.03)] pb-4">
+    <!-- ══════════════ BOTTOM NAV ══════════════ -->
+    <nav class="bg-white border-t border-slate-100 absolute bottom-0 w-full flex justify-around items-center pt-2 px-2 z-30 shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
         <button onclick="switchTab('feed')" class="nav-btn flex flex-col items-center p-2 text-sarqyt-600 transition-colors" data-tab="feed">
             <i data-lucide="store" class="w-6 h-6 mb-1"></i>
             <span class="text-[10px] font-bold">Витрина</span>
@@ -230,10 +246,92 @@
         </button>
     </nav>
 
-    <!-- OVERLAY -->
-    <div id="overlay" class="overlay fixed inset-0 bg-slate-900/40 z-40 backdrop-blur-sm" onclick="closeSheet()"></div>
+    <!-- ══════════════ OVERLAY ══════════════ -->
+    <div id="overlay" class="overlay fixed inset-0 bg-slate-900/40 z-40 backdrop-blur-sm" onclick="closeAll()"></div>
 
-    <!-- DETAIL SHEET -->
+    <!-- ══════════════ CITY BOTTOM SHEET ══════════════ -->
+    <div id="city-sheet" class="city-sheet">
+        <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto my-3"></div>
+        <div class="px-6 pb-2">
+            <h3 class="font-display font-black text-2xl text-slate-800 mb-1">Выберите город</h3>
+            <p class="text-sm text-slate-400 mb-5">Показываем заведения поблизости</p>
+            <div class="space-y-2" id="city-list"></div>
+            <p class="text-center text-xs text-slate-300 mt-6 mb-4">Скоро в других городах Казахстана</p>
+        </div>
+    </div>
+
+    <!-- ══════════════ SUBSCRIPTION BOTTOM SHEET ══════════════ -->
+    <div id="sub-sheet" class="sub-sheet">
+        <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto my-3"></div>
+
+        <!-- Sub header -->
+        <div class="px-6 pt-2 pb-4">
+            <div class="flex items-center gap-3 mb-1">
+                <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                    <i data-lucide="zap" class="w-5 h-5 text-white fill-current"></i>
+                </div>
+                <div>
+                    <h3 class="font-display font-black text-2xl text-slate-800 leading-none">Sarqyt Plus</h3>
+                    <p class="text-xs text-amber-600 font-bold">Экономь больше каждый месяц</p>
+                </div>
+            </div>
+
+            <!-- Perks -->
+            <div class="mt-4 space-y-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-7 h-7 bg-sarqyt-50 rounded-full flex items-center justify-center shrink-0">
+                        <i data-lucide="check" class="w-4 h-4 text-sarqyt-600"></i>
+                    </div>
+                    <p class="text-sm text-slate-600">Фиксированное количество пакетов по выгодной цене</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-7 h-7 bg-sarqyt-50 rounded-full flex items-center justify-center shrink-0">
+                        <i data-lucide="check" class="w-4 h-4 text-sarqyt-600"></i>
+                    </div>
+                    <p class="text-sm text-slate-600">Ранний доступ к новым заведениям</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-7 h-7 bg-sarqyt-50 rounded-full flex items-center justify-center shrink-0">
+                        <i data-lucide="check" class="w-4 h-4 text-sarqyt-600"></i>
+                    </div>
+                    <p class="text-sm text-slate-600">Приоритетное бронирование за 1 час до открытия</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-7 h-7 bg-sarqyt-50 rounded-full flex items-center justify-center shrink-0">
+                        <i data-lucide="check" class="w-4 h-4 text-sarqyt-600"></i>
+                    </div>
+                    <p class="text-sm text-slate-600">Эко-сертификат и статистика CO₂</p>
+                </div>
+            </div>
+
+            <!-- Plans -->
+            <h4 class="font-bold text-slate-700 mt-6 mb-3">Выберите план</h4>
+            <div class="space-y-3" id="sub-plans"></div>
+
+            <!-- Selected plan summary -->
+            <div id="sub-summary" class="mt-5 bg-sarqyt-50 border border-sarqyt-100 rounded-2xl px-4 py-3 hidden">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-xs font-bold text-sarqyt-600 uppercase tracking-wide">Итого в месяц</p>
+                        <p class="font-display font-black text-2xl text-sarqyt-700" id="sub-total-price">—</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-slate-400">Один пакет</p>
+                        <p class="font-bold text-slate-600" id="sub-per-pack">—</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <button onclick="subscribePlan()" id="sub-btn" class="mt-4 w-full bg-gradient-to-r from-amber-400 to-orange-500 text-white font-extrabold text-lg py-4 rounded-2xl shadow-xl transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                <i data-lucide="zap" class="w-5 h-5 fill-current"></i>
+                Подключить Sarqyt Plus
+            </button>
+            <button onclick="closeSub()" class="w-full text-slate-400 font-bold py-3 mt-1 text-sm">Не сейчас</button>
+        </div>
+    </div>
+
+    <!-- ══════════════ DETAIL SHEET ══════════════ -->
     <div id="detail-sheet" class="bottom-sheet fixed bottom-0 w-full max-w-[414px] bg-white rounded-t-[32px] z-50 flex flex-col max-h-[85vh]">
         <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto my-3"></div>
         <div class="overflow-y-auto no-scrollbar pb-6 px-6">
@@ -277,7 +375,7 @@
                 </div>
             </div>
         </div>
-        <div class="bg-white border-t border-slate-100 p-5 pb-safe rounded-t-3xl shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
+        <div class="bg-white border-t border-slate-100 p-5 rounded-t-3xl shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
             <div class="flex justify-between items-end mb-4">
                 <div>
                     <span class="block text-[10px] font-bold text-slate-400 uppercase">К оплате</span>
@@ -293,19 +391,16 @@
         </div>
     </div>
 
-    <!-- PAYMENT SHEET -->
-    <div id="payment-sheet" class="bottom-sheet fixed bottom-0 w-full max-w-[414px] bg-white rounded-t-[32px] z-[60] flex flex-col p-6 pb-safe">
+    <!-- ══════════════ PAYMENT SHEET ══════════════ -->
+    <div id="payment-sheet" class="bottom-sheet fixed bottom-0 w-full max-w-[414px] bg-white rounded-t-[32px] z-[60] flex flex-col p-6">
         <h3 class="font-display font-black text-2xl text-center mb-2">Оформление</h3>
         <p class="text-center text-slate-500 text-sm mb-6">
             Вы спасаете пакет из <span id="pay-rest-name" class="font-bold text-slate-800">Заведение</span>
         </p>
-
-        <!-- GCP/Postgres endpoint indicator -->
         <div class="flex items-center gap-2 mb-4 bg-slate-50 rounded-xl px-3 py-2 border border-slate-100">
             <i data-lucide="shield-check" class="w-4 h-4 text-sarqyt-500 shrink-0"></i>
             <span class="text-[10px] text-slate-400 font-medium">Транзакция через GCP · PostgreSQL · SSL</span>
         </div>
-
         <div class="bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-100">
             <div class="flex justify-between text-sm mb-2">
                 <span class="text-slate-500">Стоимость</span>
@@ -321,7 +416,6 @@
                 <span class="font-display font-black text-2xl text-sarqyt-600" id="pay-total">0 ₸</span>
             </div>
         </div>
-
         <button onclick="processPayment()" id="btn-kaspi" class="w-full bg-[#f1c40f] hover:bg-[#f39c12] text-black font-extrabold text-lg py-4 rounded-2xl shadow-lg transition-all transform active:scale-95 flex items-center justify-center gap-3">
             <div class="w-6 h-6 bg-black text-[#f1c40f] rounded-full flex items-center justify-center text-xs font-black">K</div>
             Оплатить через Kaspi
@@ -329,466 +423,570 @@
         <button onclick="closePayment()" class="w-full text-slate-400 font-bold py-4 mt-2">Отмена</button>
     </div>
 
-</div>
+</div><!-- /app-container -->
 
 <script>
+lucide.createIcons();
+
+// ════════════════════════════════════════════
+// CITIES
+// ════════════════════════════════════════════
+const CITIES = [
+    { id:'almaty',    name:'Алматы',    emoji:'🏙️', sub:'Южная столица', lat:43.2566, lng:76.9430, active:true  },
+    { id:'astana',    name:'Астана',    emoji:'🌃', sub:'Столица',        lat:51.1694, lng:71.4491, active:true  },
+    { id:'shymkent', name:'Шымкент',   emoji:'🌇', sub:'Южный хаб',      lat:42.3417, lng:69.5901, active:true  },
+    { id:'karaganda', name:'Қарағанды', emoji:'🏭', sub:'Промышленный центр', lat:49.8047, lng:73.1094, active:true },
+];
+
+let currentCity = CITIES[0];
+
+function renderCities() {
+    document.getElementById('city-list').innerHTML = CITIES.map(c => `
+        <button onclick="selectCity('${c.id}')"
+            class="city-item w-full flex items-center gap-4 px-4 py-3 rounded-2xl border transition-all
+            ${c.id === currentCity.id ? 'active border-sarqyt-200' : 'border-transparent hover:border-slate-100'}">
+            <span class="text-3xl">${c.emoji}</span>
+            <div class="flex-1 text-left">
+                <p class="font-bold text-slate-800">${c.name}</p>
+                <p class="text-xs text-slate-400">${c.sub}</p>
+            </div>
+            ${c.id === currentCity.id
+                ? `<div class="w-6 h-6 bg-sarqyt-500 rounded-full flex items-center justify-center">
+                       <i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>
+                   </div>`
+                : `<i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>`}
+        </button>
+    `).join('');
     lucide.createIcons();
+}
 
-    // ==========================================================
-    // API LAYER
-    // Имитирует HTTP-запросы к GCP Cloud Run → PostgreSQL.
-    // В продакшне здесь будет fetch('/api/v1/listings') и т.д.
-    // KMM shared-модуль предоставляет те же модели на Android/iOS.
-    // ==========================================================
-
-    const API_BASE = 'https://sarqyt-api-xxxxxxxx-uc.a.run.app/api/v1'; // GCP Cloud Run endpoint
-
-    // Модели данных (соответствуют PostgreSQL-схеме)
-    // Table: listings — id, name, category_id, lat, lng, bags_left, price, old_price, pickup_start, pickup_end, address, description, image_url
-    const DB_SEED = [
-        {
-            id: 1, name: "Salam Bro", cat: "fastfood", lat: 43.2492, lng: 76.9416,
-            bags: 4, price: 1200, oldPrice: 3800, time: "21:00 - 22:30",
-            address: "Абылай хана, 113",
-            desc: "Внутри сюрприза могут быть сочные куриные или говяжьи бургеры, хрустящий фри и соусы. Идеально для плотного вечернего перекуса.",
-            img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 2, name: "Six Coffee & Wine", cat: "bakery", lat: 43.2524, lng: 76.9397,
-            bags: 2, price: 1500, oldPrice: 4500, time: "20:00 - 21:00",
-            address: "Желтоксан, 115",
-            desc: "Премиальная выпечка: миндальные круассаны, краффины, тарты или сытные панини, которые не продались за день.",
-            img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 3, name: "Кафе «Неделька»", cat: "cafe", lat: 43.2435, lng: 76.9546,
-            bags: 5, price: 1300, oldPrice: 4000, time: "19:00 - 21:00",
-            address: "Абая, 19",
-            desc: "Домашняя кулинария высшего качества. В пакете могут оказаться свежие салаты, гарниры и мясные блюда сегодняшнего приготовления.",
-            img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 4, name: "Куликовский", cat: "bakery", lat: 43.2612, lng: 76.9456,
-            bags: 8, price: 1800, oldPrice: 5500, time: "20:30 - 21:30",
-            address: "Гоголя, 87",
-            desc: "Любимые десерты кондитерского дома: пирожные, эклеры, кусочки фирменных тортов с истекающим (но годным!) сроком реализации.",
-            img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-            id: 5, name: "Zheka's Doner House", cat: "fastfood", lat: 43.2588, lng: 76.9421,
-            bags: 3, price: 900, oldPrice: 2800, time: "22:00 - 23:30",
-            address: "Панфилова, 102",
-            desc: "Сытные донеры, лепёшки, наггетсы и картофель фри. Забери вкусный стрит-фуд почти даром перед закрытием.",
-            img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80"
-        }
-    ];
-
-    // Симулирует GET /api/v1/listings?city=almaty
-    function apiFetchListings(filter) {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                const data = filter === 'all' ? DB_SEED : DB_SEED.filter(r => r.cat === filter);
-                resolve({ ok: true, data });
-            }, 900); // имитация задержки сети
-        });
+function selectCity(id) {
+    currentCity = CITIES.find(c => c.id === id);
+    document.getElementById('city-label').textContent = currentCity.name;
+    renderCities();
+    closeCity();
+    loadAndRenderList();
+    if (mapInstance) {
+        mapInstance.setView([currentCity.lat, currentCity.lng], 13);
     }
+}
 
-    // Симулирует POST /api/v1/orders  (INSERT INTO orders ...)
-    function apiCreateOrder(listingId, userId) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                const listing = DB_SEED.find(r => r.id === listingId);
-                if (!listing || listing.bags <= 0) {
-                    reject(new Error('LISTING_UNAVAILABLE'));
-                    return;
-                }
-                const orderId = 'SQ-' + Math.floor(10000 + Math.random() * 90000);
-                resolve({ ok: true, orderId, listing });
-            }, 1500);
-        });
-    }
+function openCity() {
+    renderCities();
+    document.getElementById('city-sheet').classList.add('open');
+    document.getElementById('overlay').classList.add('open');
+}
 
-    // ==========================================================
-    // APP STATE
-    // ==========================================================
-    const userLocation = [43.2566, 76.9430];
+function closeCity() {
+    document.getElementById('city-sheet').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+}
 
-    const categories = [
-        { id: 'all',      name: 'Все',       icon: 'compass'   },
-        { id: 'bakery',   name: 'Выпечка',   icon: 'croissant' },
-        { id: 'cafe',     name: 'Кафе & Еда',icon: 'utensils'  },
-        { id: 'fastfood', name: 'Фастфуд',   icon: 'pizza'     }
-    ];
+// ════════════════════════════════════════════
+// SUBSCRIPTION PLANS
+// ════════════════════════════════════════════
+const SUB_PLANS = [
+    {
+        id:'starter', label:'Стартер', packs:4, price:4990, oldPrice:7200,
+        perPack:1248, color:'slate', popular:false,
+        desc:'Попробуй без риска'
+    },
+    {
+        id:'plus', label:'Plus', packs:12, price:12990, oldPrice:21600,
+        perPack:1083, color:'green', popular:true,
+        desc:'Самый популярный выбор'
+    },
+    {
+        id:'max', label:'Max', packs:24, price:22990, oldPrice:43200,
+        perPack:958, color:'purple', popular:false,
+        desc:'Максимальная экономия'
+    },
+];
 
-    let currentFilter    = 'all';
-    let activeRestaurant = null;
-    let mapInstance      = null;
-    let myOrders         = [];
-    let totalSavedMoney  = 0;
-    let totalSavedCo2    = 0;
-    let isLoadingList    = false;
+let selectedPlan = SUB_PLANS[1]; // default: Plus
+let activeSub = null;
 
-    // ==========================================================
-    // CONNECTION STATUS
-    // ==========================================================
-    function setConnStatus(state) {
-        const dot   = document.getElementById('conn-dot');
-        const label = document.getElementById('conn-label');
-        if (state === 'online') {
-            dot.className   = 'status-dot online ml-1';
-            label.textContent = 'GCP · PostgreSQL';
-            label.className = 'normal-case tracking-normal font-medium text-sarqyt-500';
-        } else if (state === 'loading') {
-            dot.className   = 'status-dot loading ml-1';
-            label.textContent = 'подключение...';
-            label.className = 'normal-case tracking-normal font-medium text-slate-300';
-        } else {
-            dot.className   = 'status-dot offline ml-1';
-            label.textContent = 'нет соединения';
-            label.className = 'normal-case tracking-normal font-medium text-red-400';
-        }
-    }
+function renderSubPlans() {
+    document.getElementById('sub-plans').innerHTML = SUB_PLANS.map(p => {
+        const discount = Math.round((1 - p.price / p.oldPrice) * 100);
+        const colors = {
+            slate:  { ring:'border-slate-200', bg:'bg-white',            badge:'bg-slate-100 text-slate-600' },
+            green:  { ring:'border-sarqyt-300', bg:'bg-sarqyt-50/50',    badge:'bg-sarqyt-500 text-white' },
+            purple: { ring:'border-purple-200', bg:'bg-purple-50/50',    badge:'bg-purple-500 text-white' },
+        }[p.color];
 
-    // ==========================================================
-    // DISTANCE HELPER
-    // ==========================================================
-    function getDistance(lat1, lon1, lat2, lon2) {
-        const R    = 6371;
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a    = Math.sin(dLat/2)**2 +
-                     Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
-        return (R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))).toFixed(1);
-    }
-
-    // ==========================================================
-    // RENDER: FILTERS
-    // ==========================================================
-    function renderFilters() {
-        const container = document.getElementById('categories-container');
-        container.innerHTML = categories.map(c => `
-            <button onclick="setFilter('${c.id}')"
-                class="px-4 py-2 rounded-2xl text-xs font-bold shrink-0 transition-all flex items-center gap-2 border
-                ${currentFilter === c.id
-                    ? 'bg-slate-800 text-white border-slate-800 shadow-md'
-                    : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'}">
-                <i data-lucide="${c.icon}" class="w-3.5 h-3.5 ${currentFilter === c.id ? 'text-sarqyt-400' : ''}"></i>
-                ${c.name}
-            </button>
-        `).join('');
-        lucide.createIcons();
-    }
-
-    function setFilter(id) {
-        currentFilter = id;
-        renderFilters();
-        loadAndRenderList();
-    }
-
-    // ==========================================================
-    // RENDER: LISTING CARDS (загружает данные через API-слой)
-    // ==========================================================
-    async function loadAndRenderList() {
-        if (isLoadingList) return;
-        isLoadingList = true;
-
-        const container = document.getElementById('restaurants-list');
-        const skeleton  = document.getElementById('skeleton-loader');
-        if (skeleton) skeleton.style.display = 'block';
-
-        setConnStatus('loading');
-
-        try {
-            const { data } = await apiFetchListings(currentFilter);
-            setConnStatus('online');
-
-            if (skeleton) skeleton.style.display = 'none';
-
-            if (data.length === 0) {
-                container.innerHTML = `<div class="text-center py-10 text-slate-400">В этой категории пока ничего нет.</div>`;
-                isLoadingList = false;
-                return;
-            }
-
-            const cards = data.map(r => {
-                const dist    = getDistance(userLocation[0], userLocation[1], r.lat, r.lng);
-                const catName = categories.find(c => c.id === r.cat).name;
-                return `
-                <div onclick="openSheet(${r.id})"
-                     class="bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-slate-100 cursor-pointer transform transition-transform active:scale-[0.98]">
-                    <div class="h-40 w-full relative">
-                        <img src="${r.img}" alt="${r.name}" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 card-img-gradient p-4 flex flex-col justify-between">
-                            <div class="flex justify-between items-start">
-                                <span class="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-full border border-white/20 uppercase tracking-wide">${catName}</span>
-                                <div class="bg-red-500 text-white text-[10px] font-black px-2 py-1 rounded-full shadow-lg">Осталось: ${r.bags}</div>
-                            </div>
-                            <div>
-                                <h3 class="font-display font-black text-2xl text-white tracking-tight leading-none">${r.name}</h3>
-                                <p class="text-white/80 text-xs mt-1 flex items-center">
-                                    <i data-lucide="map-pin" class="w-3 h-3 mr-1"></i> ${dist} км от вас
-                                </p>
-                            </div>
-                        </div>
+        return `
+        <button onclick="selectPlan('${p.id}')"
+            class="sub-plan w-full text-left border-2 rounded-2xl p-4 ${colors.ring} ${colors.bg}
+            ${p.id === selectedPlan.id ? 'selected' : ''}">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-display font-black text-lg text-slate-800">${p.label}</span>
+                        ${p.popular ? `<span class="${colors.badge} text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wide">Хит</span>` : ''}
                     </div>
-                    <div class="p-4 flex justify-between items-center bg-white">
-                        <div class="flex items-center gap-2 text-slate-500 text-xs font-semibold">
-                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center">
-                                <i data-lucide="clock" class="w-4 h-4"></i>
-                            </div>
-                            ${r.time}
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xs text-slate-400 line-through font-medium mb-[-4px]">${r.oldPrice.toLocaleString('ru-RU')} ₸</div>
-                            <div class="font-display font-black text-xl text-sarqyt-600">${r.price.toLocaleString('ru-RU')} ₸</div>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
-
-            // Сохраняем skeleton-элемент и вставляем карточки перед ним
-            container.innerHTML = cards + `<div id="skeleton-loader" style="display:none"></div>`;
-            lucide.createIcons();
-
-        } catch (e) {
-            setConnStatus('offline');
-            if (skeleton) skeleton.style.display = 'none';
-            container.innerHTML = `
-                <div class="text-center py-10 text-slate-400">
-                    <i data-lucide="wifi-off" class="w-10 h-10 mx-auto mb-2"></i>
-                    <p class="font-medium">Не удалось загрузить данные.</p>
-                    <button onclick="loadAndRenderList()" class="mt-3 text-sarqyt-600 font-bold text-sm">Повторить</button>
-                </div>`;
-            lucide.createIcons();
-        }
-
-        isLoadingList = false;
-    }
-
-    // ==========================================================
-    // NAVIGATION
-    // ==========================================================
-    function switchTab(tabId) {
-        document.querySelectorAll('main').forEach(m => m.classList.add('hidden'));
-        document.getElementById(`view-${tabId}`).classList.remove('hidden');
-
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.classList.remove('text-sarqyt-600');
-            btn.classList.add('text-slate-400');
-        });
-        const activeBtn = document.querySelector(`.nav-btn[data-tab="${tabId}"]`);
-        activeBtn.classList.remove('text-slate-400');
-        activeBtn.classList.add('text-sarqyt-600');
-
-        if (tabId === 'map') setTimeout(initMap, 50);
-    }
-
-    // ==========================================================
-    // MAP (Leaflet — данные из того же API-слоя)
-    // ==========================================================
-    function initMap() {
-        if (mapInstance) { mapInstance.invalidateSize(); return; }
-
-        mapInstance = L.map('map', { zoomControl: false }).setView(userLocation, 14);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap & CARTO'
-        }).addTo(mapInstance);
-
-        const userIcon = L.divIcon({
-            html: `<div class="w-5 h-5 bg-blue-500 rounded-full border-4 border-white shadow-lg relative"><div class="absolute inset-0 rounded-full bg-blue-500 animate-ping opacity-75"></div></div>`,
-            className: '', iconSize: [20, 20]
-        });
-        L.marker(userLocation, { icon: userIcon }).addTo(mapInstance);
-
-        DB_SEED.forEach(r => {
-            const icon = L.divIcon({
-                html: `<div class="custom-marker w-10 h-10 text-xs">${(r.price/1000).toFixed(1)}k</div>`,
-                className: '', iconSize: [40, 40], iconAnchor: [20, 40]
-            });
-            const marker = L.marker([r.lat, r.lng], { icon }).addTo(mapInstance);
-            marker.on('click', () => showMapQuickView(r));
-        });
-
-        mapInstance.on('click', () => {
-            const qv = document.getElementById('map-quick-view');
-            qv.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-        });
-    }
-
-    function showMapQuickView(r) {
-        const qv = document.getElementById('map-quick-view');
-        qv.innerHTML = `
-            <div class="flex items-center gap-4 cursor-pointer" onclick="openSheet(${r.id})">
-                <img src="${r.img}" class="w-16 h-16 rounded-xl object-cover">
-                <div class="flex-1">
-                    <h4 class="font-display font-black text-lg leading-tight text-slate-800">${r.name}</h4>
-                    <p class="text-xs text-slate-500 mt-1"><i data-lucide="clock" class="w-3 h-3 inline"></i> ${r.time}</p>
+                    <p class="text-xs text-slate-400 mt-0.5">${p.desc}</p>
                 </div>
                 <div class="text-right">
-                    <div class="bg-red-100 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded mb-1 inline-block">Ост: ${r.bags}</div>
-                    <div class="font-display font-black text-sarqyt-600 text-lg">${r.price.toLocaleString('ru-RU')} ₸</div>
-                </div>
-            </div>`;
-        qv.classList.remove('hidden', 'opacity-0', 'translate-y-10', 'pointer-events-none');
-        lucide.createIcons();
-    }
-
-    // ==========================================================
-    // BOTTOM SHEET: DETAIL
-    // ==========================================================
-    function openSheet(id) {
-        const r = DB_SEED.find(x => x.id === id);
-        activeRestaurant = r;
-
-        document.getElementById('sheet-img').src          = r.img;
-        document.getElementById('sheet-category').innerText = categories.find(c => c.id === r.cat).name;
-        document.getElementById('sheet-name').innerText   = r.name;
-        document.getElementById('sheet-address').innerHTML = `<i data-lucide="map-pin" class="w-4 h-4 mr-1"></i> ${r.address}`;
-        document.getElementById('sheet-desc').innerText   = r.desc;
-        document.getElementById('sheet-time').innerText   = r.time;
-        document.getElementById('sheet-left').innerText   = `${r.bags} шт`;
-        document.getElementById('sheet-price').innerText  = `${r.price.toLocaleString('ru-RU')} ₸`;
-        document.getElementById('sheet-old-price').innerText = `${r.oldPrice.toLocaleString('ru-RU')} ₸`;
-
-        const btn = document.getElementById('btn-reserve');
-        if (r.bags <= 0) {
-            btn.innerText = 'Распродано';
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            btn.onclick = null;
-        } else {
-            btn.innerText = 'Забронировать';
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            btn.onclick = openPayment;
-        }
-
-        document.getElementById('overlay').classList.add('open');
-        document.getElementById('detail-sheet').classList.add('open');
-        lucide.createIcons();
-    }
-
-    function closeSheet() {
-        document.getElementById('detail-sheet').classList.remove('open');
-        document.getElementById('payment-sheet').classList.remove('open');
-        document.getElementById('overlay').classList.remove('open');
-        activeRestaurant = null;
-    }
-
-    // ==========================================================
-    // PAYMENT — вызывает apiCreateOrder (POST → PostgreSQL INSERT)
-    // ==========================================================
-    function openPayment() {
-        document.getElementById('detail-sheet').classList.remove('open');
-        document.getElementById('pay-rest-name').innerText = activeRestaurant.name;
-        document.getElementById('pay-price').innerText     = `${activeRestaurant.price.toLocaleString('ru-RU')} ₸`;
-        document.getElementById('pay-total').innerText     = `${activeRestaurant.price.toLocaleString('ru-RU')} ₸`;
-        document.getElementById('payment-sheet').classList.add('open');
-    }
-
-    function closePayment() {
-        document.getElementById('payment-sheet').classList.remove('open');
-        document.getElementById('overlay').classList.remove('open');
-    }
-
-    async function processPayment() {
-        const btn = document.getElementById('btn-kaspi');
-        btn.innerHTML = `<i data-lucide="loader-2" class="w-6 h-6 animate-spin"></i> Обработка...`;
-        btn.disabled  = true;
-        lucide.createIcons();
-
-        try {
-            const userId = 'usr_demo_001'; // В KMM: SharedPreferences / Keychain
-            const { orderId, listing } = await apiCreateOrder(activeRestaurant.id, userId);
-
-            myOrders.unshift({ id: orderId, rest: listing, date: 'Сегодня' });
-
-            totalSavedMoney += listing.oldPrice - listing.price;
-            totalSavedCo2   += 2.5;
-            updateStats();
-
-            // Уменьшаем локально до следующего polling-обновления
-            const local = DB_SEED.find(r => r.id === listing.id);
-            if (local) local.bags -= 1;
-
-        } catch (err) {
-            alert('Не удалось оформить заказ. Попробуйте ещё раз.');
-        } finally {
-            btn.innerHTML = `<div class="w-6 h-6 bg-black text-[#f1c40f] rounded-full flex items-center justify-center text-xs font-black">K</div> Оплатить через Kaspi`;
-            btn.disabled  = false;
-        }
-
-        closePayment();
-        loadAndRenderList();
-        renderOrders();
-        document.getElementById('order-badge').classList.remove('hidden');
-        switchTab('orders');
-    }
-
-    function updateStats() {
-        document.getElementById('stat-money').innerText = `${totalSavedMoney.toLocaleString('ru-RU')} ₸`;
-        document.getElementById('stat-co2').innerText   = `${totalSavedCo2.toFixed(1)} кг`;
-    }
-
-    // ==========================================================
-    // RENDER: ORDERS
-    // ==========================================================
-    function renderOrders() {
-        const container  = document.getElementById('orders-list');
-        const emptyState = document.getElementById('empty-orders');
-
-        if (myOrders.length === 0) {
-            emptyState.classList.remove('hidden');
-            return;
-        }
-        emptyState.classList.add('hidden');
-
-        container.innerHTML = myOrders.map(o => `
-            <div class="bg-white rounded-3xl p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-slate-100 relative overflow-hidden">
-                <div class="absolute -right-4 -top-4 w-16 h-16 bg-sarqyt-50 rounded-full"></div>
-                <div class="flex justify-between items-center border-b border-slate-100 pb-4 mb-4 relative z-10">
-                    <div>
-                        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Заказ ${o.id}</span>
-                        <h3 class="font-display font-black text-xl text-slate-800">${o.rest.name}</h3>
-                    </div>
-                    <div class="w-12 h-12 bg-slate-100 rounded-xl overflow-hidden">
-                        <img src="${o.rest.img}" class="w-full h-full object-cover">
-                    </div>
-                </div>
-                <div class="flex items-center gap-3 mb-5">
-                    <div class="w-10 h-10 bg-red-50 text-red-500 rounded-full flex items-center justify-center">
-                        <i data-lucide="clock" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-medium">Заберите сегодня в интервале:</p>
-                        <p class="font-bold text-slate-800 text-lg">${o.rest.time}</p>
-                    </div>
-                </div>
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex gap-4 items-center">
-                    <div class="w-16 h-16 bg-white p-1 border border-slate-200 rounded-lg flex flex-wrap content-between justify-between">
-                        <div class="w-3 h-3 bg-slate-800 rounded-sm"></div><div class="w-2 h-2 bg-slate-800 rounded-sm mt-1"></div><div class="w-3 h-3 bg-slate-800 rounded-sm"></div>
-                        <div class="w-2 h-3 bg-slate-800 rounded-sm"></div><div class="w-4 h-4 bg-sarqyt-500 rounded flex items-center justify-center text-[6px] text-white font-bold">SQ</div><div class="w-2 h-2 bg-slate-800 rounded-sm"></div>
-                        <div class="w-3 h-3 bg-slate-800 rounded-sm"></div><div class="w-2 h-2 bg-slate-800 rounded-sm mb-1"></div><div class="w-3 h-3 bg-slate-800 rounded-sm"></div>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-xs text-slate-500 mb-1">Покажите этот экран на кассе</p>
-                        <button class="text-sarqyt-600 font-bold text-sm bg-sarqyt-50 px-3 py-1.5 rounded-lg w-full">Свайп для получения &rarr;</button>
-                    </div>
+                    <div class="font-display font-black text-xl text-slate-800">${p.price.toLocaleString('ru-RU')} ₸</div>
+                    <div class="text-xs text-slate-400 line-through">${p.oldPrice.toLocaleString('ru-RU')} ₸</div>
                 </div>
             </div>
-        `).join('') + emptyState.outerHTML.replace('class="', 'class="hidden ');
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
+                <div class="flex items-center gap-2">
+                    ${Array.from({length: Math.min(p.packs, 6)}).map((_,i) =>
+                        `<div class="w-6 h-6 rounded-lg bg-gradient-to-br ${p.color === 'green' ? 'from-sarqyt-400 to-sarqyt-600' : p.color === 'purple' ? 'from-purple-400 to-purple-600' : 'from-slate-300 to-slate-500'} shadow-sm flex items-center justify-center">
+                            <i data-lucide="package" class="w-3 h-3 text-white"></i>
+                        </div>`
+                    ).join('')}
+                    ${p.packs > 6 ? `<span class="text-xs font-bold text-slate-400">+${p.packs - 6}</span>` : ''}
+                </div>
+                <span class="text-xs font-bold ${p.color === 'green' ? 'text-sarqyt-600' : p.color === 'purple' ? 'text-purple-600' : 'text-slate-500'}">
+                    −${discount}% · ${p.packs} пак.
+                </span>
+            </div>
+        </button>`;
+    }).join('');
+    lucide.createIcons();
+    updateSubSummary();
+}
 
-        // Перепривязываем empty-state с hidden классом
-        const newEmpty = container.querySelector('#empty-orders');
-        if (newEmpty) newEmpty.classList.add('hidden');
+function selectPlan(id) {
+    selectedPlan = SUB_PLANS.find(p => p.id === id);
+    document.querySelectorAll('.sub-plan').forEach(el => el.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+    updateSubSummary();
+}
 
-        lucide.createIcons();
-        document.getElementById('order-badge').classList.add('hidden');
+function updateSubSummary() {
+    const p = selectedPlan;
+    const el = document.getElementById('sub-summary');
+    el.classList.remove('hidden');
+    document.getElementById('sub-total-price').textContent = p.price.toLocaleString('ru-RU') + ' ₸';
+    document.getElementById('sub-per-pack').textContent = p.perPack.toLocaleString('ru-RU') + ' ₸/пак';
+}
+
+function openSub() {
+    renderSubPlans();
+    document.getElementById('sub-sheet').classList.add('open');
+    document.getElementById('overlay').classList.add('open');
+}
+
+function closeSub() {
+    document.getElementById('sub-sheet').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+}
+
+function subscribePlan() {
+    activeSub = selectedPlan;
+    document.getElementById('sub-promo').style.display = 'none';
+    closeSub();
+
+    // Toast
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold text-sm px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 transition-all';
+    toast.innerHTML = `<i data-lucide="zap" class="w-4 h-4 fill-current"></i> Sarqyt Plus активирован! 🎉`;
+    document.body.appendChild(toast);
+    lucide.createIcons();
+    setTimeout(() => toast.remove(), 3200);
+}
+
+// ════════════════════════════════════════════
+// API / DATA
+// ════════════════════════════════════════════
+const DB_SEED = {
+    almaty: [
+        { id:1, name:"Salam Bro", cat:"fastfood", lat:43.2492, lng:76.9416,
+          bags:4, price:1200, oldPrice:3800, time:"21:00 – 22:30", address:"Абылай хана, 113",
+          desc:"Сочные бургеры, хрустящий фри и соусы. Идеально для плотного вечернего перекуса.",
+          img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" },
+        { id:2, name:"Six Coffee & Wine", cat:"bakery", lat:43.2524, lng:76.9397,
+          bags:2, price:1500, oldPrice:4500, time:"20:00 – 21:00", address:"Желтоксан, 115",
+          desc:"Миндальные круассаны, краффины, тарты — всё, что не продалось за день.",
+          img:"https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" },
+        { id:3, name:"Кафе «Неделька»", cat:"cafe", lat:43.2435, lng:76.9546,
+          bags:5, price:1300, oldPrice:4000, time:"19:00 – 21:00", address:"Абая, 19",
+          desc:"Домашняя кулинария: свежие салаты, гарниры и мясные блюда сегодняшнего приготовления.",
+          img:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" },
+        { id:4, name:"Куликовский", cat:"bakery", lat:43.2612, lng:76.9456,
+          bags:8, price:1800, oldPrice:5500, time:"20:30 – 21:30", address:"Гоголя, 87",
+          desc:"Пирожные, эклеры, кусочки фирменных тортов с истекающим (но годным!) сроком.",
+          img:"https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80" },
+        { id:5, name:"Zheka's Doner House", cat:"fastfood", lat:43.2588, lng:76.9421,
+          bags:3, price:900, oldPrice:2800, time:"22:00 – 23:30", address:"Панфилова, 102",
+          desc:"Сытные донеры, лепёшки, наггетсы и картофель фри перед закрытием.",
+          img:"https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80" },
+    ],
+    astana: [
+        { id:10, name:"Divan Café", cat:"cafe", lat:51.1784, lng:71.4466,
+          bags:6, price:1400, oldPrice:4200, time:"20:00 – 21:30", address:"Достык, 8",
+          desc:"Уютное кафе в центре столицы. Горячие блюда и фирменные напитки.",
+          img:"https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=80" },
+        { id:11, name:"Нур Пекарня", cat:"bakery", lat:51.1694, lng:71.4491,
+          bags:5, price:1100, oldPrice:3300, time:"19:30 – 21:00", address:"Кенесары, 44",
+          desc:"Свежая выпечка столичной пекарни — сдоба, пирожки и хлеб.",
+          img:"https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?auto=format&fit=crop&w=600&q=80" },
+        { id:12, name:"Burger House Astana", cat:"fastfood", lat:51.1750, lng:71.4398,
+          bags:3, price:1600, oldPrice:4800, time:"21:30 – 23:00", address:"Кабанбай батыра, 62",
+          desc:"Фирменные бургеры и картофель. Вкусно и быстро.",
+          img:"https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=600&q=80" },
+    ],
+    shymkent: [
+        { id:20, name:"Южный Базар Café", cat:"cafe", lat:42.3417, lng:69.5901,
+          bags:7, price:900, oldPrice:2700, time:"18:30 – 20:00", address:"Байтурсынова, 3",
+          desc:"Домашние блюда южной кухни — лагман, манты и самса вечернего приготовления.",
+          img:"https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80" },
+        { id:21, name:"Shymkent Bakery", cat:"bakery", lat:42.3500, lng:69.5800,
+          bags:4, price:800, oldPrice:2400, time:"20:00 – 21:30", address:"Тауке хана, 17",
+          desc:"Свежая выпечка южного города — горячие лепёшки и слойки.",
+          img:"https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80" },
+    ],
+    karaganda: [
+        { id:30, name:"Шахтёрская Кухня", cat:"cafe", lat:49.8047, lng:73.1094,
+          bags:5, price:1000, oldPrice:3000, time:"19:00 – 21:00", address:"Ленина, 28",
+          desc:"Сытные блюда домашней кухни — борщ, котлеты, картофельное пюре.",
+          img:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80" },
+        { id:31, name:"Степная Пекарня", cat:"bakery", lat:49.8100, lng:73.1200,
+          bags:6, price:700, oldPrice:2100, time:"20:00 – 21:30", address:"Гоголя, 55",
+          desc:"Хлеб и сдобная выпечка степного города по традиционным рецептам.",
+          img:"https://images.unsplash.com/photo-1549931319-a545dcf3bc73?auto=format&fit=crop&w=600&q=80" },
+    ],
+};
+
+function getSeeds() {
+    return DB_SEED[currentCity.id] || DB_SEED.almaty;
+}
+
+function apiFetchListings(filter) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            const seed = getSeeds();
+            const data = filter === 'all' ? seed : seed.filter(r => r.cat === filter);
+            resolve({ ok:true, data });
+        }, 800);
+    });
+}
+
+function apiCreateOrder(listingId) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const listing = getSeeds().find(r => r.id === listingId);
+            if (!listing || listing.bags <= 0) { reject(new Error('LISTING_UNAVAILABLE')); return; }
+            resolve({ ok:true, orderId:'SQ-' + Math.floor(10000 + Math.random() * 90000), listing });
+        }, 1400);
+    });
+}
+
+// ════════════════════════════════════════════
+// APP STATE
+// ════════════════════════════════════════════
+const categories = [
+    { id:'all',      name:'Все',        icon:'compass'   },
+    { id:'bakery',   name:'Выпечка',    icon:'croissant' },
+    { id:'cafe',     name:'Кафе & Еда', icon:'utensils'  },
+    { id:'fastfood', name:'Фастфуд',    icon:'pizza'     },
+];
+let currentFilter    = 'all';
+let activeRestaurant = null;
+let mapInstance      = null;
+let myOrders         = [];
+let totalSavedMoney  = 0;
+let totalSavedCo2    = 0;
+let isLoadingList    = false;
+
+function setConnStatus(state) {
+    const dot   = document.getElementById('conn-dot');
+    const label = document.getElementById('conn-label');
+    if (state === 'online') {
+        dot.className   = 'status-dot online ml-1';
+        label.textContent = 'GCP · PostgreSQL';
+        label.className = 'text-[10px] font-medium text-sarqyt-500 ml-0.5';
+    } else if (state === 'loading') {
+        dot.className   = 'status-dot loading ml-1';
+        label.textContent = 'подключение...';
+        label.className = 'text-[10px] font-medium text-slate-300 ml-0.5';
+    } else {
+        dot.className   = 'status-dot offline ml-1';
+        label.textContent = 'нет соединения';
+        label.className = 'text-[10px] font-medium text-red-400 ml-0.5';
     }
+}
 
-    // ==========================================================
-    // INIT
-    // ==========================================================
-    renderFilters();
-    loadAndRenderList();
+function getDistance(lat1,lon1,lat2,lon2) {
+    const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;
+    const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+    return (R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(1);
+}
+
+function renderFilters() {
+    document.getElementById('categories-container').innerHTML = categories.map(c => `
+        <button onclick="setFilter('${c.id}')"
+            class="px-4 py-2 rounded-2xl text-xs font-bold shrink-0 transition-all flex items-center gap-2 border
+            ${currentFilter===c.id
+                ? 'bg-slate-800 text-white border-slate-800 shadow-md'
+                : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'}">
+            <i data-lucide="${c.icon}" class="w-3.5 h-3.5 ${currentFilter===c.id?'text-sarqyt-400':''}"></i>
+            ${c.name}
+        </button>`).join('');
+    lucide.createIcons();
+}
+
+function setFilter(id) { currentFilter=id; renderFilters(); loadAndRenderList(); }
+
+async function loadAndRenderList() {
+    if (isLoadingList) return;
+    isLoadingList = true;
+    const container = document.getElementById('restaurants-list');
+    let skeleton = document.getElementById('skeleton-loader');
+    if (skeleton) skeleton.style.display='block';
+    setConnStatus('loading');
+    try {
+        const { data } = await apiFetchListings(currentFilter);
+        setConnStatus('online');
+        if (skeleton) skeleton.style.display='none';
+        if (!data.length) {
+            container.innerHTML = `<div class="text-center py-10 text-slate-400">В этой категории пока ничего нет.</div>`;
+            isLoadingList=false; return;
+        }
+        const userLat = currentCity.lat, userLng = currentCity.lng;
+        const cards = data.map(r => {
+            const dist    = getDistance(userLat,userLng,r.lat,r.lng);
+            const catName = categories.find(c=>c.id===r.cat).name;
+            const discount= Math.round((1-r.price/r.oldPrice)*100);
+            return `
+            <div onclick="openSheet(${r.id})"
+                 class="bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-slate-100 cursor-pointer transform transition-transform active:scale-[0.98]">
+                <div class="h-44 w-full relative">
+                    <img src="${r.img}" alt="${r.name}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 card-img-gradient p-4 flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <span class="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-full border border-white/20 uppercase tracking-wide">${catName}</span>
+                            <div class="flex flex-col items-end gap-1">
+                                <div class="bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow">Осталось: ${r.bags}</div>
+                                <div class="bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/20">−${discount}%</div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-display font-black text-2xl text-white tracking-tight leading-none">${r.name}</h3>
+                            <p class="text-white/80 text-xs mt-1 flex items-center">
+                                <i data-lucide="map-pin" class="w-3 h-3 mr-1"></i> ${dist} км от вас
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 flex justify-between items-center bg-white">
+                    <div class="flex items-center gap-2 text-slate-500 text-xs font-semibold">
+                        <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center">
+                            <i data-lucide="clock" class="w-4 h-4"></i>
+                        </div>
+                        ${r.time}
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-slate-400 line-through font-medium mb-[-4px]">${r.oldPrice.toLocaleString('ru-RU')} ₸</div>
+                        <div class="font-display font-black text-xl text-sarqyt-600">${r.price.toLocaleString('ru-RU')} ₸</div>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+        container.innerHTML = cards + `<div id="skeleton-loader" style="display:none"></div>`;
+        lucide.createIcons();
+    } catch(e) {
+        setConnStatus('offline');
+        if (skeleton) skeleton.style.display='none';
+        container.innerHTML = `<div class="text-center py-10 text-slate-400">
+            <i data-lucide="wifi-off" class="w-10 h-10 mx-auto mb-2"></i>
+            <p class="font-medium">Не удалось загрузить данные.</p>
+            <button onclick="loadAndRenderList()" class="mt-3 text-sarqyt-600 font-bold text-sm">Повторить</button>
+        </div>`;
+        lucide.createIcons();
+    }
+    isLoadingList = false;
+}
+
+// ════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════
+function switchTab(tabId) {
+    document.querySelectorAll('main').forEach(m=>m.classList.add('hidden'));
+    document.getElementById(`view-${tabId}`).classList.remove('hidden');
+    document.querySelectorAll('.nav-btn').forEach(btn=>{
+        btn.classList.remove('text-sarqyt-600'); btn.classList.add('text-slate-400');
+    });
+    const activeBtn = document.querySelector(`.nav-btn[data-tab="${tabId}"]`);
+    activeBtn.classList.remove('text-slate-400'); activeBtn.classList.add('text-sarqyt-600');
+    if (tabId==='map') setTimeout(initMap,50);
+}
+
+// ════════════════════════════════════════════
+// MAP
+// ════════════════════════════════════════════
+function initMap() {
+    const center = [currentCity.lat, currentCity.lng];
+    if (mapInstance) { mapInstance.setView(center,13); mapInstance.invalidateSize(); return; }
+    mapInstance = L.map('map',{zoomControl:false}).setView(center,13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+        attribution:'&copy; OpenStreetMap & CARTO'
+    }).addTo(mapInstance);
+    const userIcon = L.divIcon({
+        html:`<div style="width:18px;height:18px;background:#3b82f6;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,.3)"></div>`,
+        className:'',iconSize:[18,18]
+    });
+    L.marker(center,{icon:userIcon}).addTo(mapInstance);
+    getSeeds().forEach(r=>{
+        const icon=L.divIcon({
+            html:`<div class="custom-marker" style="width:44px;height:44px;font-size:11px;">${(r.price/1000).toFixed(1)}k</div>`,
+            className:'',iconSize:[44,44],iconAnchor:[22,44]
+        });
+        L.marker([r.lat,r.lng],{icon}).addTo(mapInstance).on('click',()=>showMapQuickView(r));
+    });
+    mapInstance.on('click',()=>{
+        const qv=document.getElementById('map-quick-view');
+        qv.classList.add('opacity-0','translate-y-10');
+        setTimeout(()=>qv.classList.add('hidden'),300);
+    });
+}
+
+function showMapQuickView(r) {
+    const qv=document.getElementById('map-quick-view');
+    qv.innerHTML=`
+        <div class="flex items-center gap-4 cursor-pointer" onclick="openSheet(${r.id})">
+            <img src="${r.img}" class="w-16 h-16 rounded-xl object-cover shrink-0">
+            <div class="flex-1">
+                <h4 class="font-display font-black text-lg leading-tight text-slate-800">${r.name}</h4>
+                <p class="text-xs text-slate-500 mt-1"><i data-lucide="clock" class="w-3 h-3 inline"></i> ${r.time}</p>
+            </div>
+            <div class="text-right shrink-0">
+                <div class="bg-red-100 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded mb-1 inline-block">Ост: ${r.bags}</div>
+                <div class="font-display font-black text-sarqyt-600 text-lg">${r.price.toLocaleString('ru-RU')} ₸</div>
+            </div>
+        </div>`;
+    qv.classList.remove('hidden','opacity-0','translate-y-10');
+    lucide.createIcons();
+}
+
+// ════════════════════════════════════════════
+// DETAIL SHEET
+// ════════════════════════════════════════════
+function openSheet(id) {
+    const r = getSeeds().find(x=>x.id===id);
+    activeRestaurant = r;
+    document.getElementById('sheet-img').src         = r.img;
+    document.getElementById('sheet-category').innerText = categories.find(c=>c.id===r.cat).name;
+    document.getElementById('sheet-name').innerText  = r.name;
+    document.getElementById('sheet-address').innerHTML = `<i data-lucide="map-pin" class="w-4 h-4 mr-1"></i> ${r.address}`;
+    document.getElementById('sheet-desc').innerText  = r.desc;
+    document.getElementById('sheet-time').innerText  = r.time;
+    document.getElementById('sheet-left').innerText  = `${r.bags} шт`;
+    document.getElementById('sheet-price').innerText = `${r.price.toLocaleString('ru-RU')} ₸`;
+    document.getElementById('sheet-old-price').innerText = `${r.oldPrice.toLocaleString('ru-RU')} ₸`;
+    const btn=document.getElementById('btn-reserve');
+    if (r.bags<=0) { btn.innerText='Распродано'; btn.classList.add('opacity-50','cursor-not-allowed'); btn.onclick=null; }
+    else           { btn.innerText='Забронировать'; btn.classList.remove('opacity-50','cursor-not-allowed'); btn.onclick=openPayment; }
+    document.getElementById('overlay').classList.add('open');
+    document.getElementById('detail-sheet').classList.add('open');
+    lucide.createIcons();
+}
+
+function closeAll() {
+    document.getElementById('detail-sheet').classList.remove('open');
+    document.getElementById('payment-sheet').classList.remove('open');
+    document.getElementById('city-sheet').classList.remove('open');
+    document.getElementById('sub-sheet').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+    activeRestaurant=null;
+}
+
+function closeSheet() { closeAll(); }
+
+function openPayment() {
+    document.getElementById('detail-sheet').classList.remove('open');
+    document.getElementById('pay-rest-name').innerText = activeRestaurant.name;
+    document.getElementById('pay-price').innerText     = `${activeRestaurant.price.toLocaleString('ru-RU')} ₸`;
+    document.getElementById('pay-total').innerText     = `${activeRestaurant.price.toLocaleString('ru-RU')} ₸`;
+    document.getElementById('payment-sheet').classList.add('open');
+}
+
+function closePayment() {
+    document.getElementById('payment-sheet').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+}
+
+async function processPayment() {
+    const btn=document.getElementById('btn-kaspi');
+    btn.innerHTML=`<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Обработка...`;
+    btn.disabled=true; lucide.createIcons();
+    try {
+        const { orderId, listing } = await apiCreateOrder(activeRestaurant.id);
+        myOrders.unshift({id:orderId,rest:listing,date:'Сегодня'});
+        totalSavedMoney += listing.oldPrice-listing.price;
+        totalSavedCo2   += 2.5;
+        updateStats();
+        const local=getSeeds().find(r=>r.id===listing.id);
+        if(local) local.bags-=1;
+    } catch(err) { alert('Не удалось оформить заказ. Попробуйте ещё раз.'); }
+    finally {
+        btn.innerHTML=`<div class="w-6 h-6 bg-black text-[#f1c40f] rounded-full flex items-center justify-center text-xs font-black">K</div> Оплатить через Kaspi`;
+        btn.disabled=false;
+    }
+    closePayment(); loadAndRenderList(); renderOrders();
+    document.getElementById('order-badge').classList.remove('hidden');
+    switchTab('orders');
+}
+
+function updateStats() {
+    document.getElementById('stat-money').innerText=`${totalSavedMoney.toLocaleString('ru-RU')} ₸`;
+    document.getElementById('stat-co2').innerText=`${totalSavedCo2.toFixed(1)} кг`;
+}
+
+function renderOrders() {
+    const container=document.getElementById('orders-list');
+    const emptyState=document.getElementById('empty-orders');
+    if(!myOrders.length) { emptyState.classList.remove('hidden'); return; }
+    emptyState.classList.add('hidden');
+    container.innerHTML=myOrders.map(o=>`
+        <div class="bg-white rounded-3xl p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-slate-100 relative overflow-hidden">
+            <div class="absolute -right-4 -top-4 w-16 h-16 bg-sarqyt-50 rounded-full"></div>
+            <div class="flex justify-between items-center border-b border-slate-100 pb-4 mb-4 relative z-10">
+                <div>
+                    <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Заказ ${o.id}</span>
+                    <h3 class="font-display font-black text-xl text-slate-800">${o.rest.name}</h3>
+                </div>
+                <div class="w-12 h-12 bg-slate-100 rounded-xl overflow-hidden">
+                    <img src="${o.rest.img}" class="w-full h-full object-cover">
+                </div>
+            </div>
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-red-50 text-red-500 rounded-full flex items-center justify-center">
+                    <i data-lucide="clock" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400 font-medium">Заберите сегодня:</p>
+                    <p class="font-bold text-slate-800 text-lg">${o.rest.time}</p>
+                </div>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3 flex gap-3 items-center">
+                <div class="w-14 h-14 bg-white p-1 border border-slate-200 rounded-lg flex flex-wrap content-between justify-between">
+                    <div class="w-3 h-3 bg-slate-800 rounded-sm"></div><div class="w-2 h-2 bg-slate-800 rounded-sm mt-1"></div><div class="w-3 h-3 bg-slate-800 rounded-sm"></div>
+                    <div class="w-2 h-3 bg-slate-800 rounded-sm"></div><div class="w-4 h-4 bg-sarqyt-500 rounded flex items-center justify-center text-[5px] text-white font-bold">SQ</div><div class="w-2 h-2 bg-slate-800 rounded-sm"></div>
+                    <div class="w-3 h-3 bg-slate-800 rounded-sm"></div><div class="w-2 h-2 bg-slate-800 rounded-sm mb-1"></div><div class="w-3 h-3 bg-slate-800 rounded-sm"></div>
+                </div>
+                <div class="flex-1">
+                    <p class="text-xs text-slate-500 mb-1">Покажите на кассе</p>
+                    <button class="text-sarqyt-600 font-bold text-sm bg-sarqyt-50 px-3 py-1.5 rounded-lg w-full">Свайп для получения →</button>
+                </div>
+            </div>
+        </div>`).join('') + emptyState.outerHTML.replace('class="','class="hidden ');
+    const newEmpty=container.querySelector('#empty-orders');
+    if(newEmpty) newEmpty.classList.add('hidden');
+    lucide.createIcons();
+    document.getElementById('order-badge').classList.add('hidden');
+}
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+renderFilters();
+loadAndRenderList();
 </script>
 </body>
 </html>
