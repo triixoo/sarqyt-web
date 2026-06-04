@@ -176,20 +176,6 @@
             <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2" id="categories-container"></div>
         </div>
 
-        <!-- Stack badge -->
-        <div class="px-5 mb-3">
-            <div class="bg-white border border-slate-100 rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm">
-                <div class="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center">
-                    <i data-lucide="cloud" class="w-4 h-4 text-blue-500"></i>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Архитектура</p>
-                    <p class="text-xs font-semibold text-slate-600 truncate">KMM · GCP Cloud Run · PostgreSQL</p>
-                </div>
-                <span class="status-dot online" id="api-dot"></span>
-            </div>
-        </div>
-
         <!-- List -->
         <div class="px-5 space-y-4" id="restaurants-list">
             <div id="skeleton-loader" class="space-y-4">
@@ -388,6 +374,139 @@
             <button id="btn-reserve" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-lg py-4 rounded-2xl shadow-xl transition-all transform active:scale-95 flex items-center justify-center gap-2">
                 Забронировать
             </button>
+        </div>
+    </div>
+
+    <!-- ══════════════ AUTH SCREEN ══════════════ -->
+    <div id="auth-screen" class="absolute inset-0 bg-white z-[80] flex flex-col overflow-y-auto no-scrollbar">
+
+        <!-- Top illustration -->
+        <div class="relative bg-gradient-to-br from-sarqyt-500 to-emerald-800 pt-14 pb-20 px-8 text-white overflow-hidden">
+            <!-- decorative circles -->
+            <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/5 rounded-full"></div>
+            <div class="absolute top-16 -right-4 w-28 h-28 bg-white/5 rounded-full"></div>
+            <div class="absolute -bottom-6 -left-8 w-36 h-36 bg-white/5 rounded-full"></div>
+
+            <div class="relative z-10">
+                <h1 class="font-display font-black text-4xl tracking-tight mb-1">Sarqyt.</h1>
+                <p class="text-sarqyt-100 text-sm font-medium mb-8">Спасай еду · Береги планету</p>
+
+                <!-- Floating food cards -->
+                <div class="flex gap-3">
+                    <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl p-3 flex items-center gap-2 flex-1">
+                        <span class="text-2xl">🥐</span>
+                        <div>
+                            <p class="text-[10px] font-bold text-sarqyt-100">Выпечка</p>
+                            <p class="text-sm font-black">−70%</p>
+                        </div>
+                    </div>
+                    <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl p-3 flex items-center gap-2 flex-1">
+                        <span class="text-2xl">🍔</span>
+                        <div>
+                            <p class="text-[10px] font-bold text-sarqyt-100">Фастфуд</p>
+                            <p class="text-sm font-black">−68%</p>
+                        </div>
+                    </div>
+                    <div class="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl p-3 flex items-center gap-2 flex-1">
+                        <span class="text-2xl">🍱</span>
+                        <div>
+                            <p class="text-[10px] font-bold text-sarqyt-100">Кафе</p>
+                            <p class="text-sm font-black">−65%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form area -->
+        <div class="flex-1 px-6 pt-8 pb-10">
+
+            <!-- Toggle: Войти / Зарегистрироваться -->
+            <div class="flex bg-slate-100 rounded-2xl p-1 mb-7">
+                <button id="tab-login" onclick="authTab('login')"
+                    class="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all bg-white shadow text-slate-800">
+                    Войти
+                </button>
+                <button id="tab-register" onclick="authTab('register')"
+                    class="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-400">
+                    Регистрация
+                </button>
+            </div>
+
+            <!-- Name field (only on register) -->
+            <div id="field-name" class="hidden mb-4">
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Ваше имя</label>
+                <div class="relative">
+                    <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300"></i>
+                    <input id="input-name" type="text" placeholder="Введите имя"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-12 pr-4 py-4 text-sm font-medium text-slate-800 placeholder-slate-300 focus:outline-none focus:border-sarqyt-400 focus:ring-2 focus:ring-sarqyt-100 transition-all">
+                </div>
+            </div>
+
+            <!-- Phone field -->
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Номер телефона</label>
+                <div class="relative">
+                    <!-- Flag + code -->
+                    <div class="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 border-r border-slate-200 pr-3">
+                        <span class="text-lg">🇰🇿</span>
+                        <span class="text-sm font-bold text-slate-600">+7</span>
+                    </div>
+                    <input id="input-phone" type="tel" placeholder="700 000 00 00"
+                        maxlength="13"
+                        oninput="formatPhone(this)"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-20 pr-4 py-4 text-sm font-medium text-slate-800 placeholder-slate-300 focus:outline-none focus:border-sarqyt-400 focus:ring-2 focus:ring-sarqyt-100 transition-all tracking-wider">
+                </div>
+            </div>
+
+            <!-- Password field -->
+            <div class="mb-6">
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Пароль</label>
+                <div class="relative">
+                    <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300"></i>
+                    <input id="input-pass" type="password" placeholder="••••••••"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-12 pr-12 py-4 text-sm font-medium text-slate-800 placeholder-slate-300 focus:outline-none focus:border-sarqyt-400 focus:ring-2 focus:ring-sarqyt-100 transition-all">
+                    <button onclick="togglePass()" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-colors">
+                        <i data-lucide="eye" class="w-5 h-5" id="pass-eye"></i>
+                    </button>
+                </div>
+                <button id="forgot-btn" onclick="" class="mt-2 text-xs text-sarqyt-600 font-bold float-right">Забыли пароль?</button>
+                <div class="clear-both"></div>
+            </div>
+
+            <!-- Main CTA -->
+            <button onclick="submitAuth()" id="auth-btn"
+                class="w-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-base py-4 rounded-2xl shadow-xl transition-all transform active:scale-95 flex items-center justify-center gap-2 mb-4">
+                <span id="auth-btn-text">Войти</span>
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Divider -->
+            <div class="flex items-center gap-3 mb-4">
+                <div class="flex-1 h-px bg-slate-200"></div>
+                <span class="text-xs font-medium text-slate-400">или</span>
+                <div class="flex-1 h-px bg-slate-200"></div>
+            </div>
+
+            <!-- Google sign-in -->
+            <button onclick="authGoogle()"
+                class="w-full bg-white border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-sm py-3.5 rounded-2xl transition-all transform active:scale-95 flex items-center justify-center gap-3 shadow-sm mb-3">
+                <!-- Google logo SVG -->
+                <svg width="20" height="20" viewBox="0 0 48 48">
+                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                </svg>
+                Продолжить с Google
+            </button>
+
+            <!-- Terms -->
+            <p class="text-center text-[11px] text-slate-400 leading-relaxed mt-4">
+                Нажимая «Войти», вы соглашаетесь с
+                <span class="text-sarqyt-600 font-semibold cursor-pointer">Условиями использования</span>
+                и <span class="text-sarqyt-600 font-semibold cursor-pointer">Политикой конфиденциальности</span>
+            </p>
         </div>
     </div>
 
@@ -983,10 +1102,101 @@ function renderOrders() {
 }
 
 // ════════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════════
+let authMode = 'login'; // 'login' | 'register'
+
+function authTab(mode) {
+    authMode = mode;
+    const isReg = mode === 'register';
+
+    document.getElementById('tab-login').className    = `flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${!isReg ? 'bg-white shadow text-slate-800' : 'text-slate-400'}`;
+    document.getElementById('tab-register').className = `flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${isReg  ? 'bg-white shadow text-slate-800' : 'text-slate-400'}`;
+
+    document.getElementById('field-name').classList.toggle('hidden', !isReg);
+    document.getElementById('forgot-btn').classList.toggle('hidden', isReg);
+    document.getElementById('auth-btn-text').textContent = isReg ? 'Зарегистрироваться' : 'Войти';
+    lucide.createIcons();
+}
+
+function formatPhone(input) {
+    let v = input.value.replace(/\D/g,'');
+    if (v.startsWith('7')) v = v.slice(1);
+    if (v.length > 10) v = v.slice(0,10);
+    const parts = [v.slice(0,3), v.slice(3,6), v.slice(6,8), v.slice(8,10)].filter(Boolean);
+    input.value = parts.join(' ');
+}
+
+function togglePass() {
+    const inp = document.getElementById('input-pass');
+    const eye = document.getElementById('pass-eye');
+    if (inp.type === 'password') {
+        inp.type = 'text';
+        eye.setAttribute('data-lucide','eye-off');
+    } else {
+        inp.type = 'password';
+        eye.setAttribute('data-lucide','eye');
+    }
+    lucide.createIcons();
+}
+
+function submitAuth() {
+    const phone = document.getElementById('input-phone').value.trim();
+    const pass  = document.getElementById('input-pass').value.trim();
+    if (!phone) { shakeField('input-phone'); return; }
+    if (!pass)  { shakeField('input-pass');  return; }
+
+    const btn = document.getElementById('auth-btn');
+    btn.innerHTML = `<svg class="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="3" stroke-dasharray="60" stroke-dashoffset="20"/></svg>`;
+    btn.disabled = true;
+
+    setTimeout(() => {
+        closeAuth();
+        showToast('Добро пожаловать в Sarqyt! 👋');
+    }, 1400);
+}
+
+function authGoogle() {
+    const btn = event.currentTarget;
+    btn.innerHTML = `<svg class="animate-spin w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="60" stroke-dashoffset="20"/></svg> <span>Подключение...</span>`;
+    btn.disabled = true;
+    setTimeout(() => {
+        closeAuth();
+        showToast('Вы вошли через Google! 🎉');
+    }, 1600);
+}
+
+function closeAuth() {
+    document.getElementById('auth-screen').style.opacity = '0';
+    document.getElementById('auth-screen').style.transform = 'translateY(40px)';
+    document.getElementById('auth-screen').style.transition = 'all .4s cubic-bezier(.4,0,.2,1)';
+    setTimeout(() => {
+        document.getElementById('auth-screen').style.display = 'none';
+    }, 400);
+}
+
+function shakeField(id) {
+    const el = document.getElementById(id);
+    el.style.animation = 'none';
+    el.style.borderColor = '#ef4444';
+    el.style.boxShadow = '0 0 0 3px #fee2e2';
+    setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 1400);
+}
+
+function showToast(msg) {
+    const t = document.createElement('div');
+    t.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 text-white font-bold text-sm px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2';
+    t.innerHTML = msg;
+    document.body.appendChild(t);
+    setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .4s'; setTimeout(()=>t.remove(),400); }, 3000);
+}
+
+// ════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════
 renderFilters();
 loadAndRenderList();
+lucide.createIcons();
 </script>
 </body>
 </html>
