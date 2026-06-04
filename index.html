@@ -105,6 +105,31 @@
         /* bottom nav safe */
         nav { padding-bottom:env(safe-area-inset-bottom,8px); }
 
+        /* ── DARK MODE — main app ── */
+        .dark .app-container       { background:#0f172a; }
+        .dark header               { background:rgba(15,23,42,.95) !important; border-color:#1e293b; }
+        .dark header h1            { color:#10b981; }
+        .dark header span, .dark header p { color:#64748b; }
+        .dark #dark-toggle         { background:#1e293b; }
+        .dark #dark-toggle i       { color:#94a3b8; }
+        .dark nav                  { background:#0f172a; border-color:#1e293b; }
+        .dark #view-feed           { background:#0f172a; }
+        .dark #view-orders         { background:#0f172a; }
+        /* cards */
+        .dark .bg-white            { background:#1e293b !important; }
+        .dark .bg-slate-50         { background:#0f172a !important; }
+        .dark .border-slate-100    { border-color:#1e293b !important; }
+        .dark .border-slate-200    { border-color:#334155 !important; }
+        .dark .text-slate-800      { color:#f1f5f9 !important; }
+        .dark .text-slate-700      { color:#cbd5e1 !important; }
+        .dark .text-slate-600      { color:#94a3b8 !important; }
+        .dark .text-slate-500      { color:#64748b !important; }
+        .dark .text-slate-400      { color:#475569 !important; }
+        .dark .shadow-sm, .dark .shadow-\[0_4px_20px_rgba\(0\,0\,0\,0\.04\)\] { box-shadow:0 4px 20px rgba(0,0,0,.4) !important; }
+        /* detail & payment sheets */
+        .dark #detail-sheet, .dark #payment-sheet, .dark #city-sheet, .dark #sub-sheet { background:#1e293b; }
+        .dark #detail-sheet .border-t, .dark #payment-sheet .h-px { border-color:#334155; }
+
         /* ── DARK MODE ── */
         .dark #auth-screen { background:#0f172a; }
         .dark #auth-screen .flex-1 { background:#0f172a; }
@@ -160,8 +185,13 @@
                 <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i>
                 Подписка
             </button>
+            <!-- Dark mode toggle -->
+            <button onclick="toggleDark()" id="dark-toggle"
+                class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
+                <i data-lucide="moon" class="w-4 h-4 text-slate-600" id="dark-icon"></i>
+            </button>
             <button class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors">
-                <i data-lucide="user" class="w-4.5 h-4.5 text-slate-600"></i>
+                <i data-lucide="user" class="w-4 h-4 text-slate-600"></i>
             </button>
         </div>
     </header>
@@ -412,12 +442,6 @@
     <!-- ══════════════ AUTH SCREEN ══════════════ -->
     <div id="auth-screen" class="absolute inset-0 bg-white z-[80] flex flex-col overflow-y-auto no-scrollbar">
 
-        <!-- Dark mode toggle -->
-        <button onclick="toggleDark()" id="dark-toggle"
-            class="absolute top-5 right-5 z-10 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white hover:bg-white/30 transition-all shadow-lg">
-            <i data-lucide="moon" class="w-5 h-5" id="dark-icon"></i>
-        </button>
-
         <!-- Top illustration -->
         <div class="relative bg-gradient-to-br from-sarqyt-500 to-emerald-800 pt-14 pb-20 px-8 text-white overflow-hidden">
             <!-- decorative circles -->
@@ -556,7 +580,7 @@
         </p>
         <div class="flex items-center gap-2 mb-4 bg-slate-50 rounded-xl px-3 py-2 border border-slate-100">
             <i data-lucide="shield-check" class="w-4 h-4 text-sarqyt-500 shrink-0"></i>
-            <span class="text-[10px] text-slate-400 font-medium">Транзакция через GCP · PostgreSQL · SSL</span>
+            <span class="text-[10px] text-slate-400 font-medium">Защищённая оплата · SSL</span>
         </div>
         <div class="bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-100">
             <div class="flex justify-between text-sm mb-2">
