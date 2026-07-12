@@ -1346,6 +1346,12 @@ async function processPayment() {
     await new Promise(r => setTimeout(r, 1400));
 
     const r = activeRestaurant;
+    if (!r) {
+        // payment sheet was closed during processing — abort quietly
+        btn.disabled = false;
+        btn.innerHTML = `<div class="w-6 h-6 bg-black text-[#f1c40f] rounded-full flex items-center justify-center text-xs font-black">K</div>Оплатить через Kaspi`;
+        return;
+    }
     if (r.bags <= 0) {
         alert('Этот пакет уже раскупили!');
         btn.disabled = false;
